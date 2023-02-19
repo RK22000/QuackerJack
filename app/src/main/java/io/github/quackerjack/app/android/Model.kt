@@ -5,15 +5,15 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import io.github.quackerjack.app.android.DuckActions.*
-import io.github.quackerjack.app.android.Moods.MEAN
+import io.github.quackerjack.app.android.Moods.GET_WRECKED
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import kotlin.concurrent.thread
 
 enum class Moods(val serverVal: String) {
-    NICE("nice"),
-    MEAN("mean"),
+    GET_REASSURED("nice"),
+    GET_WRECKED("mean"),
     TESLA("tesla")
 }
 
@@ -25,7 +25,7 @@ enum class DuckActions {
 }
 
 class Model(
-    val moodState: MutableState<Moods> = mutableStateOf(MEAN),
+    val moodState: MutableState<Moods> = mutableStateOf(GET_WRECKED),
     val duckActionState: MutableState<DuckActions> = mutableStateOf(IDLE),
     var userText: String = "",
     var duckText: String = "",
