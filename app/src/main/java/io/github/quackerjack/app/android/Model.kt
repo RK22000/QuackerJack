@@ -42,7 +42,7 @@ class Model(
         thread {
             val json = JSONObject()
             json.put(Httpcall.SNIPPET, userText)
-            val mood = if (Random(42).nextFloat() < 0.01) Moods.TESLA else moodState.value
+            val mood = if (Random(42).nextFloat() < 0.1) Moods.TESLA else moodState.value
             json.put(Httpcall.MODE, mood.serverVal)
             Httpcall.main(json, callback)
         }

@@ -37,9 +37,9 @@ import kotlinx.coroutines.withContext
 
 class MainActivity : ComponentActivity() {
     companion object {
-        private const val ACTIVATION_KEYWORD = "Hey Jack"
+        private const val ACTIVATION_KEYWORD = "Damn It"
         private const val ACTIVATION_RESPONSE = "What's up BOSS!"
-        private const val CONVERSATION_STOPPER = "Stop Talking Jack"
+        private const val CONVERSATION_STOPPER = "Goodbye"
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
