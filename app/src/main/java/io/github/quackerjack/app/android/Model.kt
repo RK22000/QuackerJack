@@ -13,8 +13,8 @@ import kotlin.concurrent.thread
 import kotlin.random.Random
 
 enum class Moods(val serverVal: String) {
-    GET_REASSURED("nice"),
     GET_WRECKED("mean"),
+    GET_THERAPY("nice"),
     TESLA("tesla")
 }
 
