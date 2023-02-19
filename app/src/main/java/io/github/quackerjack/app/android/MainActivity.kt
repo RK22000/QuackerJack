@@ -40,6 +40,7 @@ class MainActivity : ComponentActivity() {
         private val ACTIVATION_KEYWORDS = listOf("Damn It", "Hey Jack", "*")
         private const val ACTIVATION_RESPONSE = "What's up BOSS!"
         private const val CONVERSATION_STOPPER = "Goodbye"
+        private val CONVERSATION_STOPPERS = listOf("Goodbye", "Stop talking Jack")
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,12 +82,15 @@ class MainActivity : ComponentActivity() {
             override fun listen() {
                 model.duckActionState.value = DuckActions.LISTENING
                 stt.listen {
-                    it?.let {
-                        model.userText = it
-                        model.duckText = it
+                    it?.let {usrTxt ->
+                        model.userText = usrTxt
+                        model.duckText = usrTxt
 //                        model.send(it)
 //                        speak()
-                        if (it.contains(CONVERSATION_STOPPER, ignoreCase = true))
+//                        if (it.contains(CONVERSATION_STOPPER, ignoreCase = true))
+                        if (
+                            CONVERSATION_STOPPERS.any { usrTxt.contains(it, true) }
+                        )
                             exit()
                         else
                             sendForServerResponse()
