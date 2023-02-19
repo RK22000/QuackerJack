@@ -139,10 +139,10 @@ class MainActivity : ComponentActivity() {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
-                painter = painterResource(id = R.drawable.duck),
+                painter = painterResource(id = R.drawable.quackerjack),
                 contentDescription = "This is Quacker Jack",
                 modifier = Modifier
-                    .scale(2f)
+                    .scale(1.5f)
                     .border(
                         3.dp,
                         when(model.duckActionState.value) {
