@@ -21,7 +21,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,8 +37,10 @@ import kotlinx.coroutines.withContext
 class MainActivity : ComponentActivity() {
     companion object {
         private const val ACTIVATION_KEYWORD = "Damn It"
+        private val ACTIVATION_KEYWORDS = listOf("Damn It", "Hey Jack", "*")
         private const val ACTIVATION_RESPONSE = "What's up BOSS!"
         private const val CONVERSATION_STOPPER = "Goodbye"
+        private val CONVERSATION_STOPPERS = listOf("Goodbye", "Stop talking Jack")
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,12 +82,15 @@ class MainActivity : ComponentActivity() {
             override fun listen() {
                 model.duckActionState.value = DuckActions.LISTENING
                 stt.listen {
-                    it?.let {
-                        model.userText = it
-                        model.duckText = it
+                    it?.let {usrTxt ->
+                        model.userText = usrTxt
+                        model.duckText = usrTxt
 //                        model.send(it)
 //                        speak()
-                        if (it.contains(CONVERSATION_STOPPER, ignoreCase = true))
+//                        if (it.contains(CONVERSATION_STOPPER, ignoreCase = true))
+                        if (
+                            CONVERSATION_STOPPERS.any { usrTxt.contains(it, true) }
+                        )
                             exit()
                         else
                             sendForServerResponse()
@@ -103,8 +107,8 @@ class MainActivity : ComponentActivity() {
 
             override fun exit() {
                 model.duckActionState.value = DuckActions.IDLE
-                stt.keepListeningForKeyword(
-                    keyword = ACTIVATION_KEYWORD,
+                stt.keepListeningForKeywords(
+                    keywords = ACTIVATION_KEYWORDS,
                     onKeywordHeard = {
 //                        model.triggerConvo()
                         model.duckText = ACTIVATION_RESPONSE
@@ -148,12 +152,28 @@ class MainActivity : ComponentActivity() {
                     .scale(1.5f)
                     .border(
                         3.dp,
-                        when(model.duckActionState.value) {
+                        when (model.duckActionState.value) {
                             DuckActions.SPEAKING -> Color.Green
                             else -> Color.LightGray
                         },
                         CircleShape
                     )
+            )
+            TextField(
+                value = model.nameState.value,
+                onValueChange = {
+                    model.nameState.value = it
+                },
+                singleLine = true,
+                label = { Text(text = "User Name") },
+                leadingIcon = {
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_person),
+                        contentDescription = "User ${model.nameState.value}",
+                        modifier = Modifier.scale(1.7f)
+                    )
+                },
+
             )
             Column(
                 modifier = Modifier.fillMaxWidth(0.7f),
@@ -165,11 +185,17 @@ class MainActivity : ComponentActivity() {
                 }.forEach {
                     val onClick = { mood = it }
                     if (it == mood) {
-                        Button(onClick = {}, Modifier.fillMaxWidth().padding(5.dp)) {
+                        Button(onClick = {},
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(5.dp)) {
                             Text(text = it.name, fontWeight = FontWeight.ExtraBold)
                         }
                     } else {
-                        OutlinedButton(onClick = onClick, Modifier.fillMaxWidth().padding(5.dp)) {
+                        OutlinedButton(onClick = onClick,
+                            Modifier
+                                .fillMaxWidth()
+                                .padding(5.dp)) {
                             Text(text = it.name, fontWeight = FontWeight.ExtraBold)
                         }
                     }
@@ -182,7 +208,7 @@ class MainActivity : ComponentActivity() {
                     .scale(3f)
                     .border(
                         2.dp,
-                        when(model.duckActionState.value) {
+                        when (model.duckActionState.value) {
                             DuckActions.Triggered -> Color.Magenta
                             DuckActions.LISTENING -> Color.Green
                             else -> Color.LightGray

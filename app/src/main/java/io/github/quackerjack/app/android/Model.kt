@@ -30,6 +30,7 @@ class Model(
     val duckActionState: MutableState<DuckActions> = mutableStateOf(IDLE),
     var userText: String = "",
     var duckText: String = "",
+    var nameState: MutableState<String> = mutableStateOf("JOE")
 ): ViewModel() {
     fun triggerConvo() {
         duckActionState.value = Triggered
@@ -42,6 +43,10 @@ class Model(
         thread {
             val json = JSONObject()
             json.put(Httpcall.SNIPPET, userText)
+            json.put(
+                Httpcall.NAME,
+                nameState.value.takeIf { it.isNotBlank() } ?: "Boss"
+            )
             val mood = if (Random(42).nextFloat() < 0.1) Moods.TESLA else moodState.value
             json.put(Httpcall.MODE, mood.serverVal)
             Httpcall.main(json, callback)
