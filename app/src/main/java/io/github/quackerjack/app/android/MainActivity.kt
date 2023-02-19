@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,7 +38,7 @@ import kotlinx.coroutines.withContext
 
 class MainActivity : ComponentActivity() {
     companion object {
-        private const val ACTIVATION_KEYWORD = "HELLO WORLD"
+        private const val ACTIVATION_KEYWORD = "Hey Jack"
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -129,28 +130,30 @@ class MainActivity : ComponentActivity() {
             Image(
                 painter = painterResource(id = R.drawable.duck),
                 contentDescription = "This is Quacker Jack",
-                modifier = Modifier.border(
-                    3.dp,
-                    when(model.duckActionState.value) {
-                        DuckActions.SPEAKING -> Color.Green
-                        else -> Color.LightGray
-                    },
-                    CircleShape
-                )
+                modifier = Modifier
+                    .scale(2f)
+                    .border(
+                        3.dp,
+                        when(model.duckActionState.value) {
+                            DuckActions.SPEAKING -> Color.Green
+                            else -> Color.LightGray
+                        },
+                        CircleShape
+                    )
             )
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth(0.5f),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Moods.values().forEach {
                     val onClick = { mood = it }
                     if (it == mood) {
-                        OutlinedButton(onClick = {}) {
+                        OutlinedButton(onClick = {}, Modifier.fillMaxWidth()) {
                             Text(text = it.name)
                         }
                     } else {
-                        Button(onClick = onClick) {
+                        Button(onClick = onClick, Modifier.fillMaxWidth()) {
                             Text(text = it.name)
                         }
                     }
@@ -159,15 +162,17 @@ class MainActivity : ComponentActivity() {
             Image(
                 painter = painterResource(id = R.drawable.ic_mic),
                 contentDescription = "This is a mic",
-                modifier = Modifier.border(
-                    3.dp,
-                    when(model.duckActionState.value) {
-                        DuckActions.Triggered -> Color.Magenta
-                        DuckActions.LISTENING -> Color.Green
-                        else -> Color.LightGray
-                    },
-                    CircleShape
-                )
+                modifier = Modifier
+                    .scale(2f)
+                    .border(
+                        3.dp,
+                        when(model.duckActionState.value) {
+                            DuckActions.Triggered -> Color.Magenta
+                            DuckActions.LISTENING -> Color.Green
+                            else -> Color.LightGray
+                        },
+                        CircleShape
+                    )
             )
 
         }

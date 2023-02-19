@@ -9,10 +9,10 @@ import io.github.quackerjack.app.android.DuckActions.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-enum class Moods {
-    MEAN,
-    HELPFUL,
-    TALKATIVE
+enum class Moods(serverVal: String) {
+    NICE("nice"),
+    MEAN("mean"),
+    TESLA("tesla")
 }
 
 enum class DuckActions {
