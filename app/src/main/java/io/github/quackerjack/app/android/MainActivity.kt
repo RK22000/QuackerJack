@@ -39,6 +39,7 @@ import kotlinx.coroutines.withContext
 class MainActivity : ComponentActivity() {
     companion object {
         private const val ACTIVATION_KEYWORD = "Hey Jack"
+        private const val ACTIVATION_RESPONSE = "What's up BOSS!"
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,8 +84,17 @@ class MainActivity : ComponentActivity() {
                     it?.let {
                         model.userText = it
                         model.duckText = it
-                        speak()
+//                        model.send(it)
+//                        speak()
+                        sendForServerResponse()
                     } ?: exit()
+                }
+            }
+
+            override fun sendForServerResponse() {
+                model.send{
+                    model.duckText = it
+                    speak()
                 }
             }
 
@@ -93,8 +103,9 @@ class MainActivity : ComponentActivity() {
                 stt.keepListeningForKeyword(
                     keyword = ACTIVATION_KEYWORD,
                     onKeywordHeard = {
-                        model.triggerConvo()
-                        listen()
+//                        model.triggerConvo()
+                        model.duckText = ACTIVATION_RESPONSE
+                        speak()
                     }
                 )
             }

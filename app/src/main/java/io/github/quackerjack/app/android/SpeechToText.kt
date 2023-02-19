@@ -184,5 +184,6 @@ abstract class SimpleUtteranceDoneListener: UtteranceProgressListener() {
 interface ConvoLoop {
     fun speak()
     fun listen()
+    fun sendForServerResponse()
     fun exit()
 }
