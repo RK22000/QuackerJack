@@ -10,6 +10,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.json.JSONObject
 import kotlin.concurrent.thread
+import kotlin.random.Random
 
 enum class Moods(val serverVal: String) {
     GET_REASSURED("nice"),
@@ -41,28 +42,9 @@ class Model(
         thread {
             val json = JSONObject()
             json.put(Httpcall.SNIPPET, userText)
-            json.put(Httpcall.MODE, moodState.value.serverVal)
+            val mood = if (Random(42).nextFloat() < 0.01) Moods.TESLA else moodState.value
+            json.put(Httpcall.MODE, mood.serverVal)
             Httpcall.main(json, callback)
         }
-//        viewModelScope.launch {
-//            with(Dispatchers.IO) {
-//                val json = JSONObject()
-//                json.put("snippet", userText)
-//                json.put("mode", moodState.value.serverVal)
-//                val url = "https://duck123.uw.r.appspot.com/chatbot"
-//
-//                val response = post(url, json, object : Callback {
-//                    override fun onFailure(call: Call, e: IOException) {
-//                        Log.v("Model", "Server response failed \n{${e.message}")
-//
-//                    }
-//
-//                    override fun onResponse(call: Call, response: Response) {
-//                        Log.v("Model", "Server response: $response")
-//                    }
-//
-//                })
-//            }
-//        }
     }
 }
