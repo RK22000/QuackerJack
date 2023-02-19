@@ -14,6 +14,7 @@ interface SpeechToText {
     fun listen(doAfterListening: (String?)->Unit)
     fun isAvailable(): Boolean
     fun keepListeningForKeyword(keyword: String, onKeywordHeard: () -> Unit)
+    fun keepListeningForKeywords(keywords: List<String>, onKeywordHeard: () -> Unit)
     fun stopListening()
     fun destroy()
 }
@@ -90,6 +91,42 @@ class BasicSpeechToText(val appContext: Context): SpeechToText {
                 p0?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.let {
                     Log.v("SpeechToTextListen", it.toString())
                     if (it.get(0).lowercase().contains(keyword.lowercase())) {
+                        Log.v("SpeechToTextListen", "Recognized keyword")
+                        speechRecognizer.stopListening()
+                        keywordHeard = true
+                    }
+                }
+            }
+            override fun onError(p0: Int) {
+                super.onError(p0)
+                if (keywordHeard)
+                    onKeywordHeard()
+                else
+                    tryAgain()
+            }
+        })
+        speechRecognizer.startListening(recognizerIntent)
+    }
+
+    override fun keepListeningForKeywords(keywords: List<String>, onKeywordHeard: () -> Unit) {
+        var keywordHeard = false
+        speechRecognizer.setRecognitionListener(object : SimpleListener() {
+            override fun onResults(p0: Bundle?) {
+                p0?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.get(0)?.let {userTxt ->
+                    if (keywordHeard || keywords.any {userTxt.contains(it, true)}) {
+                        onKeywordHeard()
+                    } else {
+                        tryAgain()
+                    }
+                }
+            }
+            override fun onPartialResults(p0: Bundle?) {
+                Log.v("SpeechToTextListen", "Called On Partial Result")
+                p0?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.let {
+                    Log.v("SpeechToTextListen", it.toString())
+                    if (
+                        keywords.any { wrd -> it.get(0).contains(wrd, true) }
+                    ) {
                         Log.v("SpeechToTextListen", "Recognized keyword")
                         speechRecognizer.stopListening()
                         keywordHeard = true

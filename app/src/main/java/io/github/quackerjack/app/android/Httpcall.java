@@ -17,7 +17,8 @@ public class Httpcall {
     public static final String
             SNIPPET = "snippet",
             MODE = "mode",
-            RESPONSE = "response";
+            RESPONSE = "response",
+            NAME = "name";
     public static interface HttpResponseCallback {
         void onServerResponse(String botReply);
     }
