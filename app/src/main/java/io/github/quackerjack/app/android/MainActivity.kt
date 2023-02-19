@@ -160,7 +160,9 @@ class MainActivity : ComponentActivity() {
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Moods.values().forEach {
+                Moods.values().filter {
+                    it != Moods.TESLA
+                }.forEach {
                     val onClick = { mood = it }
                     if (it == mood) {
                         Button(onClick = {}, Modifier.fillMaxWidth().padding(5.dp)) {
