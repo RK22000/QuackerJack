@@ -7,4 +7,11 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="bitter_sweet">#FFEF6461</color>
+    <color name="earth_yellow">#FFE4B363</color>
+    <color name="cerulean">#FF006992</color>
+    <color name="alabaster">#FFE0DFD5</color>
+    <color name="Onyx">#FF313638</color>
+
 </resources>

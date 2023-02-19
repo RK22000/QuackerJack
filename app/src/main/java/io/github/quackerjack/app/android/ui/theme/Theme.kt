@@ -12,6 +12,12 @@ private val DarkColorPalette = darkColors(
     secondary = Teal200
 )
 
+private val QuackerColorPalett = darkColors(
+    primary = Bittersweet,
+    primaryVariant = EarthYellow,
+    secondary = Cerulean
+)
+
 //private val LightColorPalette = lightColors(
 //    primary = Purple500,
 //    primaryVariant = Purple700,
@@ -29,11 +35,12 @@ private val DarkColorPalette = darkColors(
 
 @Composable
 fun QuackerJackTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
-    val colors = if (darkTheme) {
-        DarkColorPalette
-    } else {
-        DarkColorPalette
-    }
+    val colors = QuackerColorPalett
+//    if (darkTheme) {
+//        DarkColorPalette
+//    } else {
+//        DarkColorPalette
+//    }
 
     MaterialTheme(
         colors = colors,
