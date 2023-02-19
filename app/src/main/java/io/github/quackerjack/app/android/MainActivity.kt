@@ -9,10 +9,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
@@ -24,6 +21,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
@@ -164,12 +163,12 @@ class MainActivity : ComponentActivity() {
                 Moods.values().forEach {
                     val onClick = { mood = it }
                     if (it == mood) {
-                        OutlinedButton(onClick = {}, Modifier.fillMaxWidth()) {
-                            Text(text = it.name)
+                        Button(onClick = {}, Modifier.fillMaxWidth().padding(5.dp)) {
+                            Text(text = it.name, fontWeight = FontWeight.ExtraBold)
                         }
                     } else {
-                        Button(onClick = onClick, Modifier.fillMaxWidth()) {
-                            Text(text = it.name)
+                        OutlinedButton(onClick = onClick, Modifier.fillMaxWidth().padding(5.dp)) {
+                            Text(text = it.name, fontWeight = FontWeight.ExtraBold)
                         }
                     }
                 }
@@ -178,9 +177,9 @@ class MainActivity : ComponentActivity() {
                 painter = painterResource(id = R.drawable.ic_mic),
                 contentDescription = "This is a mic",
                 modifier = Modifier
-                    .scale(2f)
+                    .scale(3f)
                     .border(
-                        3.dp,
+                        2.dp,
                         when(model.duckActionState.value) {
                             DuckActions.Triggered -> Color.Magenta
                             DuckActions.LISTENING -> Color.Green
