@@ -153,7 +153,7 @@ class MainActivity : ComponentActivity() {
                     )
             )
             Column(
-                modifier = Modifier.fillMaxWidth(0.5f),
+                modifier = Modifier.fillMaxWidth(0.7f),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
