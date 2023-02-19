@@ -146,6 +146,10 @@ class BasicSpeechToText(val appContext: Context): SpeechToText {
             }
             override fun onPartialResults(p0: Bundle?) {
                 // Do Nothing
+                Log.v("SpeechToTextListen", "Called On Partial Result")
+                p0?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)?.let {
+                    Log.v("SpeechToTextListen", it.toString())
+                }
             }
 
             override fun onError(p0: Int) {

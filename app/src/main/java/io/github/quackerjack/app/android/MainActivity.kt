@@ -40,6 +40,7 @@ class MainActivity : ComponentActivity() {
     companion object {
         private const val ACTIVATION_KEYWORD = "Hey Jack"
         private const val ACTIVATION_RESPONSE = "What's up BOSS!"
+        private const val CONVERSATION_STOPPER = "Stop Talking Jack"
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,7 +87,10 @@ class MainActivity : ComponentActivity() {
                         model.duckText = it
 //                        model.send(it)
 //                        speak()
-                        sendForServerResponse()
+                        if (it.contains(CONVERSATION_STOPPER, ignoreCase = true))
+                            exit()
+                        else
+                            sendForServerResponse()
                     } ?: exit()
                 }
             }
