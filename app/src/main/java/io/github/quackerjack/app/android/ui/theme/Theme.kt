@@ -3,7 +3,6 @@ package io.github.quackerjack.app.android.ui.theme
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.darkColors
-import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
 
 private val DarkColorPalette = darkColors(
@@ -13,9 +12,10 @@ private val DarkColorPalette = darkColors(
 )
 
 private val QuackerColorPalett = darkColors(
-    primary = Bittersweet,
+    primary = OrangePeel,
     primaryVariant = EarthYellow,
-    secondary = Cerulean
+    secondary = Cerulean,
+    error = Bittersweet
 )
 
 //private val LightColorPalette = lightColors(

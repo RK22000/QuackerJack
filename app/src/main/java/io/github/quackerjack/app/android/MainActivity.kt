@@ -35,6 +35,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.*
+import kotlin.concurrent.thread
 
 class MainActivity : ComponentActivity() {
     companion object {
@@ -166,9 +167,10 @@ class MainActivity : ComponentActivity() {
 
         Column(
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.SpaceEvenly,
+            verticalArrangement = Arrangement.SpaceBetween,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Box{}
             Image(
                 painter = painterResource(id = R.drawable.quackerjack),
                 contentDescription = "This is Quacker Jack",
@@ -241,6 +243,21 @@ class MainActivity : ComponentActivity() {
                         CircleShape
                     )
             )
+
+            Button(
+                onClick = {
+                          thread {
+                              ClearHistroyHttpCall.main()
+                          }
+                },
+                colors = ButtonDefaults.buttonColors(
+                    backgroundColor = MaterialTheme.colors.error,
+                    contentColor = MaterialTheme.colors.onError
+                ),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text(text = "Clear Chat History")
+            }
 
         }
 
