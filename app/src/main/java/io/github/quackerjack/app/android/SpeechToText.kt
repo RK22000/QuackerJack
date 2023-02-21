@@ -54,6 +54,7 @@ class BasicSpeechToText(val appContext: Context): SpeechToText {
     }
 }
     private val speechRecognizer by lazy {
+        Log.v(this::class.simpleName, "Creating Speech Recognizer")
         SpeechRecognizer.createSpeechRecognizer(appContext)
     }
     private val recognizerIntent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH).apply {
@@ -198,10 +199,12 @@ class BasicSpeechToText(val appContext: Context): SpeechToText {
     }
 
     override fun stopListening() {
+        Log.v(this::class.simpleName, "Pausing Speech Recognizer")
         speechRecognizer.stopListening()
     }
 
     override fun destroy() {
+        Log.v(this::class.simpleName, "Destroying SPeech Recognizer")
        speechRecognizer.destroy()
     }
 }

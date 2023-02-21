@@ -34,6 +34,7 @@ import io.github.quackerjack.app.android.ui.theme.QuackerJackTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.util.*
 
 class MainActivity : ComponentActivity() {
     companion object {
@@ -43,6 +44,8 @@ class MainActivity : ComponentActivity() {
         private const val CONVERSATION_STOPPER = "Goodbye"
         private val CONVERSATION_STOPPERS = listOf("Goodbye", "Stop talking Jack")
     }
+    lateinit var stt: SpeechToText
+    lateinit var convoLoop: ConvoLoop
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val model = ViewModelProvider(this)[Model::class.java]
@@ -52,20 +55,15 @@ class MainActivity : ComponentActivity() {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.RECORD_AUDIO), RECORD_AUDIO_REQUEST_CODE)
         }
 
-        val stt: SpeechToText = BasicSpeechToText(applicationContext)
-        if (stt.isAvailable()) {
-            Toast.makeText(applicationContext, "TTS Available", Toast.LENGTH_SHORT).show()
-        } else {
-            Toast.makeText(applicationContext, "TTS Unavailable", Toast.LENGTH_SHORT).show()
-        }
         var ttsInitialized = false
         val tts = TextToSpeech(applicationContext) { status ->
             ttsInitialized = status == TextToSpeech.SUCCESS
         }
-        val convoLoop = object : ConvoLoop {
+        convoLoop = object : ConvoLoop {
             override fun speak() {
                 val text = model.duckText
                 if (ttsInitialized) {
+                    tts.language = Locale.UK
                     model.duckActionState.value = DuckActions.SPEAKING
                     tts.speak(text, TextToSpeech.QUEUE_FLUSH, null, "0")
                     tts.setOnUtteranceProgressListener(object : SimpleUtteranceDoneListener() {
@@ -119,7 +117,7 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
-        convoLoop.exit()
+
 
         setContent {
             QuackerJackTheme {
@@ -132,6 +130,30 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        if (::stt.isInitialized)
+            stt.destroy()
+        stt = BasicSpeechToText(applicationContext)
+        if (stt.isAvailable()) {
+            Toast.makeText(applicationContext, "TTS Available", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(applicationContext, "TTS Unavailable", Toast.LENGTH_SHORT).show()
+        }
+        convoLoop.exit()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        stt.stopListening()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        stt.stopListening()
+        stt.destroy()
     }
 
     @Composable
