@@ -39,6 +39,7 @@ class Model(
             duckActionState.value = LISTENING
         }
     }
+    private val rand = Random(42)
     fun send(callback: Httpcall.HttpResponseCallback) {
         thread {
             val json = JSONObject()
@@ -47,7 +48,7 @@ class Model(
                 Httpcall.NAME,
                 nameState.value.takeIf { it.isNotBlank() } ?: "Boss"
             )
-            val mood = if (Random(42).nextFloat() < 0.1) Moods.TESLA else moodState.value
+            val mood = if (rand.nextFloat() < 0.1) Moods.TESLA else moodState.value
             json.put(Httpcall.MODE, mood.serverVal)
             Httpcall.main(json, callback)
         }

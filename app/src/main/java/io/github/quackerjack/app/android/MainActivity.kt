@@ -29,6 +29,7 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import io.github.quackerjack.app.android.ui.theme.EarthYellow
 import io.github.quackerjack.app.android.ui.theme.QuackerJackTheme
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -99,6 +100,7 @@ class MainActivity : ComponentActivity() {
             }
 
             override fun sendForServerResponse() {
+                model.duckActionState.value = DuckActions.Triggered
                 model.send{
                     model.duckText = it
                     speak()
@@ -154,6 +156,7 @@ class MainActivity : ComponentActivity() {
                         3.dp,
                         when (model.duckActionState.value) {
                             DuckActions.SPEAKING -> Color.Green
+                            DuckActions.Triggered -> EarthYellow
                             else -> Color.LightGray
                         },
                         CircleShape
@@ -209,7 +212,7 @@ class MainActivity : ComponentActivity() {
                     .border(
                         2.dp,
                         when (model.duckActionState.value) {
-                            DuckActions.Triggered -> Color.Magenta
+//                            DuckActions.Triggered -> Color.Magenta
                             DuckActions.LISTENING -> Color.Green
                             else -> Color.LightGray
                         },
