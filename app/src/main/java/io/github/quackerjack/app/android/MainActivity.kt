@@ -1,6 +1,7 @@
 package io.github.quackerjack.app.android
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
@@ -9,17 +10,17 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -119,7 +120,21 @@ class MainActivity : ComponentActivity() {
             }
         }
 
-
+        val sharedPref = getPreferences(Context.MODE_PRIVATE)
+        sharedPref.apply {
+            getString(Preferences.SECRET_KEY.key, null)?.let {
+                model.secretKey = it
+            }
+            getString(Preferences.USER_NAME.key, null)?.let {
+                model.nameState.value = it
+            }
+        }
+        model.saveName = {
+            with(sharedPref.edit()) {
+                putString(Preferences.USER_NAME.key, it)
+                apply()
+            }
+        }
         setContent {
             QuackerJackTheme {
                 // A surface container using the 'background' color from the theme
@@ -127,7 +142,19 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
                 ) {
-                    Screen()
+                    Scaffold { it
+                        Screen()
+                        SecretKeyDialog (
+                            onKeyEntered = {
+                                with(sharedPref.edit()) {
+                                    putString(Preferences.SECRET_KEY.key, it)
+                                    apply()
+                                }
+                                model.secretKey = it
+
+                            }
+                        )
+                    }
                 }
             }
         }
@@ -185,7 +212,11 @@ class MainActivity : ComponentActivity() {
                         },
                         CircleShape
                     )
+                    .clickable {
+                        model.dialogOpenState.value = true
+                    }
             )
+            val focusManager = LocalFocusManager.current
             TextField(
                 value = model.nameState.value,
                 onValueChange = {
@@ -200,6 +231,10 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.scale(1.7f)
                     )
                 },
+                keyboardActions = KeyboardActions {
+                    model.saveName(model.nameState.value)
+                    focusManager.clearFocus()
+                }
 
             )
             Column(
