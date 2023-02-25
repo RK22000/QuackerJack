@@ -33,7 +33,9 @@ class Model(
     var userText: String = ""
     var duckText: String = ""
     var nameState: MutableState<String> = mutableStateOf("JOE")
+    var secretKey = ""
 
+    lateinit var saveName: (String)->Unit
     fun triggerConvo() {
         duckActionState.value = Triggered
         viewModelScope.launch {

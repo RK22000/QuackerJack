@@ -1,6 +1,7 @@
 package io.github.quackerjack.app.android
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
@@ -118,6 +119,22 @@ class MainActivity : ComponentActivity() {
                 )
             }
         }
+
+        val sharedPref = getPreferences(Context.MODE_PRIVATE)
+        sharedPref.apply {
+            getString(Preferences.SECRET_KEY.key, null)?.let {
+                model.secretKey = it
+            }
+            getString(Preferences.USER_NAME.key, null)?.let {
+                model.nameState.value = it
+            }
+        }
+        model.saveName = {
+            with(sharedPref.edit()) {
+                putString(Preferences.USER_NAME.key, it)
+                apply()
+            }
+        }
         setContent {
             QuackerJackTheme {
                 // A surface container using the 'background' color from the theme
@@ -129,7 +146,12 @@ class MainActivity : ComponentActivity() {
                         Screen()
                         SecretKeyDialog (
                             onKeyEntered = {
-                                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+                                with(sharedPref.edit()) {
+                                    putString(Preferences.SECRET_KEY.key, it)
+                                    apply()
+                                }
+                                model.secretKey = it
+
                             }
                         )
                     }
@@ -209,7 +231,10 @@ class MainActivity : ComponentActivity() {
                         modifier = Modifier.scale(1.7f)
                     )
                 },
-                keyboardActions = KeyboardActions { focusManager.clearFocus() }
+                keyboardActions = KeyboardActions {
+                    model.saveName(model.nameState.value)
+                    focusManager.clearFocus()
+                }
 
             )
             Column(
