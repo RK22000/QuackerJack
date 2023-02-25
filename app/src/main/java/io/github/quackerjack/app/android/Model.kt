@@ -26,12 +26,14 @@ enum class DuckActions {
 }
 
 class Model(
-    val moodState: MutableState<Moods> = mutableStateOf(GET_WRECKED),
-    val duckActionState: MutableState<DuckActions> = mutableStateOf(IDLE),
-    var userText: String = "",
-    var duckText: String = "",
-    var nameState: MutableState<String> = mutableStateOf("JOE")
 ): ViewModel() {
+    val moodState: MutableState<Moods> = mutableStateOf(GET_WRECKED)
+    val duckActionState: MutableState<DuckActions> = mutableStateOf(IDLE)
+    val dialogOpenState: MutableState<Boolean> = mutableStateOf(false)
+    var userText: String = ""
+    var duckText: String = ""
+    var nameState: MutableState<String> = mutableStateOf("JOE")
+
     fun triggerConvo() {
         duckActionState.value = Triggered
         viewModelScope.launch {
