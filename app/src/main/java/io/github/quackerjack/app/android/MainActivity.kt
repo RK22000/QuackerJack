@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -277,6 +278,11 @@ class MainActivity : ComponentActivity() {
                         },
                         CircleShape
                     )
+                    .clickable {
+                        thread {
+                            Log.v("OPEN_AI_TEST", openAITextCompletion(null, model.secretKey)?:"Got no response")
+                        }
+                    }
             )
 
             Button(
